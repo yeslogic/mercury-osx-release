@@ -13,7 +13,7 @@ fi
 
 # which Mercury ROTD?
 
-MERCURY_ROTD=${MERCURY_ROTD:-2018-03-19}
+MERCURY_ROTD=${MERCURY_ROTD:-2020-04-15}
 TARBALL=rotd-$MERCURY_ROTD
 
 mkdir -p repos
