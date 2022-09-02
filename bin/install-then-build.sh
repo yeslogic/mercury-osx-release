@@ -1,49 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 set -o pipefail
 set -u
 
-CWD=$(pwd | perl -pe 's{/bin$}{}')
-
-if [ "$UID" != "0" ]; then
-  echo "Error: this needs to be run as root"
-  false
-fi
-
-# which Mercury ROTD?
-
+BASE_URL=https://github.com/Mercury-Language/mercury-srcdist/archive
 MERCURY_ROTD=${MERCURY_ROTD:-2022-02-26}
-TARBALL=rotd-$MERCURY_ROTD
 
-mkdir -p repos
+CWD=$( cd "$( dirname "$0" )/.." && pwd )
+DLD_DIR=$CWD/downloads
+SRC_DIR=$DLD_DIR/mercury-srcdist-rotd-$MERCURY_ROTD
+OUT_DIR=$CWD/output
 
-if [ ! -f "repos/$TARBALL.tar.gz" ]; then
-  wget -O "repos/$TARBALL.tar.gz" https://github.com/Mercury-Language/mercury-srcdist/archive/$TARBALL.tar.gz
+PARALLEL="-j$( sysctl -n hw.ncpu )"
+
+if [ ! -f "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" ] ; then
+    ( mkdir -p "$DLD_DIR" &&
+      cd "$DLD_DIR" &&
+      curl -LO "$BASE_URL/rotd-$MERCURY_ROTD.tar.gz" )
 fi
 
-SRCDIR=repos/mercury-srcdist-$TARBALL
+# Build x86_64 Mercury.
+rm -rf "$SRC_DIR"
+tar xvf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
 
-if [ ! -d "$SRCDIR" ]; then
-  tar xzf "repos/$TARBALL.tar.gz" -C repos
-fi
+pushd "$SRC_DIR"
 
-# build Mercury
+./configure \
+    --enable-libgrades=hlc.gc,hlc.par.gc \
+    --prefix="/tmp/mercury-rotd-$MERCURY_ROTD"
 
-cd "$SRCDIR"
-./configure
+make PARALLEL="$PARALLEL"
+make install PARALLEL="$PARALLEL"
 
-CPUS=$(sysctl -n hw.ncpu)
-perl -pe "s/# PARALLEL=-j2/PARALLEL=-j$CPUS/" -i Makefile
+popd
 
-make
-make install
+TARBALL=mercury-rotd-$MERCURY_ROTD-osx.tar.gz
 
-BINDIR=/usr/local/mercury-$TARBALL
-grep -s "$BINDIR" ~/.bashrc || echo "PATH=$BINDIR/bin:\$PATH" >> ~/.bashrc
-
-mkdir -p "$CWD/output"
-
-if [ ! -f "$CWD/output/mercury-$TARBALL-osx.tar.gz" ]; then
-  tar zcf $CWD/output/mercury-$TARBALL-osx.tar.gz -C /usr/local mercury-$TARBALL
+if [ ! -f "$OUT_DIR/$TARBALL" ] ; then
+    ( mkdir -p "$OUT_DIR" &&
+      tar zcf "$OUT_DIR/$TARBALL" -C /tmp "mercury-rotd-$MERCURY_ROTD" )
 fi
