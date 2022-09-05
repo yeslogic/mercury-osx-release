@@ -24,29 +24,31 @@ fi
 rm -rf "$SRC_DIR"
 tar xvf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
 
+X86_64_TRIPLE=x86_64-apple-darwin
+
 pushd "$SRC_DIR"
 
 ./configure \
     --enable-libgrades=hlc.gc,hlc.par.gc \
-    --prefix="/tmp/mercury-rotd-$MERCURY_ROTD"
+    --prefix="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE"
 
 make PARALLEL="$PARALLEL"
 make install PARALLEL="$PARALLEL"
 
 popd
 
-TARBALL=mercury-rotd-$MERCURY_ROTD-osx.tar.gz
+X86_64_TARBALL=mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE.tar.gz
 
-if [ ! -f "$OUT_DIR/$TARBALL" ] ; then
-    ( mkdir -p "$OUT_DIR" &&
-      tar zcf "$OUT_DIR/$TARBALL" -C /tmp "mercury-rotd-$MERCURY_ROTD" )
+if [ ! -f "$OUT_DIR/$X86_64_TARBALL" ] ; then
+    ( mkdir -p "$OUT_DIR" && tar zcf "$OUT_DIR/$X86_64_TARBALL" \
+      -C /tmp "mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE" )
 fi
 
 # Build aarch64 Mercury.
 rm -rf "$SRC_DIR"
 tar xvf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
 
-export PATH="/tmp/mercury-rotd-$MERCURY_ROTD/bin:$PATH"
+export PATH="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE/bin:$PATH"
 export CC="clang -target aarch64-apple-darwin"
 AARCH64_TRIPLE=aarch64-apple-darwin
 
@@ -65,12 +67,12 @@ mmake MMAKEFLAGS="$PARALLEL"
 mmake install MMAKEFLAGS="$PARALLEL"
 
 ./tools/copy_mercury_binaries \
-    "/tmp/mercury-rotd-$MERCURY_ROTD" \
+    "/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE" \
     "/tmp/mercury-rotd-$MERCURY_ROTD-$AARCH64_TRIPLE"
 
 popd
 
-AARCH64_TARBALL=mercury-rotd-$MERCURY_ROTD-$AARCH64_TRIPLE-osx.tar.gz
+AARCH64_TARBALL=mercury-rotd-$MERCURY_ROTD-$AARCH64_TRIPLE.tar.gz
 
 if [ ! -f "$OUT_DIR/$AARCH64_TARBALL" ] ; then
     ( mkdir -p "$OUT_DIR" && tar zcf "$OUT_DIR/$AARCH64_TARBALL" \
