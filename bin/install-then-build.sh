@@ -4,6 +4,8 @@ set -e
 set -o pipefail
 set -u
 
+MACOSX_DEPLOYMENT_TARGET=10.13
+
 BASE_URL=https://github.com/Mercury-Language/mercury-srcdist/archive
 MERCURY_ROTD=${MERCURY_ROTD:-2022-02-26}
 
@@ -29,6 +31,7 @@ X86_64_TRIPLE=x86_64-apple-darwin
 pushd "$SRC_DIR"
 
 ./configure \
+    --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.gc,hlc.par.gc \
     --prefix="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE"
 
@@ -59,6 +62,7 @@ pushd "$SRC_DIR"
 cp "$CWD/bin/configure-cross-5f1dfc806f87" tools/configure_cross
 ./tools/configure_cross \
     --host=aarch64-apple-darwin \
+    --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.par.gc \
     --prefix="/tmp/mercury-rotd-$MERCURY_ROTD-$AARCH64_TRIPLE"
 
