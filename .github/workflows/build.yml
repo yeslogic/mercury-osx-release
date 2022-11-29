@@ -1,0 +1,39 @@
+name: Build x86_64 and aarch64 Mercury
+
+on:
+  # Exclude all branches from push events.
+  push:
+    branches: '!**'
+  # Exclude all branches from pull_request events.
+  pull_request:
+    branches: '!**'
+  # Allow a workflow to be run manually.
+  workflow_dispatch:
+
+env:
+  MERCURY_ROTD: '2022-02-26'
+
+jobs:
+  build-mercury:
+    name: Build x86_64 and aarch64 Mercury
+    runs-on: macos-11
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        clean: true
+
+    - name: Run build script
+      run: ./bin/install-then-build.sh
+
+    - name: Upload x86_64 artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: mercury-rotd-${{ env.MERCURY_ROTD }}-x86_64-apple-darwin
+        path: output/mercury-rotd-${{ env.MERCURY_ROTD }}-x86_64-apple-darwin.tar.gz
+
+    - name: Upload aarch64 artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: mercury-rotd-${{ env.MERCURY_ROTD }}-aarch64-apple-darwin
+        path: output/mercury-rotd-${{ env.MERCURY_ROTD }}-aarch64-apple-darwin.tar.gz
