@@ -24,7 +24,7 @@ fi
 
 # Build x86_64 Mercury.
 rm -rf "$SRC_DIR"
-tar xvf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
+tar xf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
 
 X86_64_TRIPLE=x86_64-apple-darwin
 
@@ -49,7 +49,7 @@ fi
 
 # Build aarch64 Mercury.
 rm -rf "$SRC_DIR"
-tar xvf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
+tar xf "$DLD_DIR/rotd-$MERCURY_ROTD.tar.gz" -C "$DLD_DIR"
 
 export PATH="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE/bin:$PATH"
 export CC="clang -target aarch64-apple-darwin"
