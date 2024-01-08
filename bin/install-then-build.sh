@@ -30,7 +30,9 @@ X86_64_TRIPLE=x86_64-apple-darwin
 
 pushd "$SRC_DIR"
 
-./configure \
+# Explicitly use zsh to workaround a parse error that occurs with bash 3.2.
+# (This can be reverted in the next Mercury upgrade.)
+zsh ./configure \
     --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.gc,hlc.par.gc \
     --prefix="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE"
@@ -57,7 +59,12 @@ AARCH64_TRIPLE=aarch64-apple-darwin
 
 pushd "$SRC_DIR"
 
-./tools/configure_cross \
+# Explicitly use zsh to workaround a parse error that occurs with bash 3.2.
+# (This can be reverted in the next Mercury upgrade.)
+sed -e 's,^sh configure,zsh configure,' <tools/configure_cross >tools/configure_cross.new
+chmod +x tools/configure_cross.new
+
+./tools/configure_cross.new \
     --host=aarch64-apple-darwin \
     --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.par.gc \
