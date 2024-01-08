@@ -7,7 +7,7 @@ set -u
 MACOSX_DEPLOYMENT_TARGET=10.13
 
 BASE_URL=https://github.com/Mercury-Language/mercury-srcdist/archive
-MERCURY_ROTD=${MERCURY_ROTD:-2022-02-26}
+MERCURY_ROTD=${MERCURY_ROTD:-2023-12-20}
 
 CWD=$( cd "$( dirname "$0" )/.." && pwd )
 DLD_DIR=$CWD/downloads
@@ -57,9 +57,6 @@ AARCH64_TRIPLE=aarch64-apple-darwin
 
 pushd "$SRC_DIR"
 
-# Manually overwrite the older version of configure_cross for now.
-# Remove once we are using ROTD 2022-08-18 or newer.
-cp "$CWD/bin/configure-cross-5f1dfc806f87" tools/configure_cross
 ./tools/configure_cross \
     --host=aarch64-apple-darwin \
     --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
