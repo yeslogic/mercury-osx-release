@@ -7,7 +7,7 @@ set -u
 MACOSX_DEPLOYMENT_TARGET=10.13
 
 BASE_URL=https://github.com/Mercury-Language/mercury-srcdist/archive
-MERCURY_ROTD=${MERCURY_ROTD:-2023-12-20}
+MERCURY_ROTD=${MERCURY_ROTD:-2024-02-27}
 
 CWD=$( cd "$( dirname "$0" )/.." && pwd )
 DLD_DIR=$CWD/downloads
@@ -30,9 +30,7 @@ X86_64_TRIPLE=x86_64-apple-darwin
 
 pushd "$SRC_DIR"
 
-# Explicitly use zsh to workaround a parse error that occurs with bash 3.2.
-# (This can be reverted in the next Mercury upgrade.)
-zsh ./configure \
+./configure \
     --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.gc,hlc.par.gc \
     --prefix="/tmp/mercury-rotd-$MERCURY_ROTD-$X86_64_TRIPLE"
