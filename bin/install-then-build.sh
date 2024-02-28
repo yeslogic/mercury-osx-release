@@ -7,7 +7,7 @@ set -u
 MACOSX_DEPLOYMENT_TARGET=10.13
 
 BASE_URL=https://github.com/Mercury-Language/mercury-srcdist/archive
-MERCURY_ROTD=${MERCURY_ROTD:-2024-02-27}
+MERCURY_ROTD=${MERCURY_ROTD:-2026-10-01}
 
 CWD=$( cd "$( dirname "$0" )/.." && pwd )
 DLD_DIR=$CWD/downloads

@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 env:
-  MERCURY_ROTD: '2024-02-27'
+  MERCURY_ROTD: '2026-10-01'
 
 jobs:
   build-mercury:
