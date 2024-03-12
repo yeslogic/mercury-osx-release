@@ -1,4 +1,4 @@
-name: Build x86_64 and aarch64 Mercury
+name: Build aarch64 and x86_64 Mercury
 
 on:
   # Exclude all branches from push events.
@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-mercury:
-    name: Build x86_64 and aarch64 Mercury
+    name: Build aarch64 and x86_64 Mercury
     runs-on: macos-14
 
     steps:
