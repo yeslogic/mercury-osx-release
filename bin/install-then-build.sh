@@ -57,12 +57,7 @@ export CC="clang -target $X86_64_TRIPLE"
 
 pushd "$SRC_DIR"
 
-# Explicitly use zsh to workaround a parse error that occurs with bash 3.2.
-# (This can be reverted in the next Mercury upgrade.)
-sed -e 's,^sh configure,zsh configure,' <tools/configure_cross >tools/configure_cross.new
-chmod +x tools/configure_cross.new
-
-./tools/configure_cross.new \
+./tools/configure_cross \
     --host="$X86_64_TRIPLE" \
     --with-macosx-deployment-target="$MACOSX_DEPLOYMENT_TARGET" \
     --enable-libgrades=hlc.par.gc \
